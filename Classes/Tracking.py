@@ -6,12 +6,10 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver import ActionChains
 import time
 import random
-from database.db import product_collection
-from cerberus import Validator
-from schema.product_schema import product_schema
 from datetime import datetime
 from Classes.Email import SendEmail
 from selenium.webdriver.chrome.options import Options
+from database.db import user_collection
 
 
 class Tracking:
@@ -60,17 +58,23 @@ class Tracking:
 
         return {"product_name": product_name, "product_url": product_url, "current_price": price_text, "product_image_src": image_src}
 
-    def start_tracking(self):
+    def start_tracking(self, user_email):
         # check the price every 4 hours
         while True:
-            products = list(product_collection.find())
+            existing_user = user_collection.find_one({"email": user_email})
+            if not existing_user:
+                return
+
+            products = existing_user.get('products', [])
+
             for product in products:
                 self.driver.get(product["product_url"])
+
                 # Fetch the current price
                 price = self.driver.find_element(By.CSS_SELECTOR, "span.-b.-ubpt.-tal.-fs24.-prxs")
                 new_price = int(price.text.split()[1].replace(",", ""))
 
-                # Compare prices
+                # Check if the price has dropped
                 if new_price < product["current_price"]:
                     # add the ',' when needed
                     formatted_amount = "{:,}".format(new_price)
@@ -78,23 +82,25 @@ class Tracking:
                     # send email to notify the user
                     email_sender = SendEmail()
                     email_sender.send_price_drop_email(
-                        recipient_email='okolochidera223@gmail.com',
+                        recipient_email=existing_user["email"],
                         product_name=product['product_name'],
                         new_price=formatted_amount,
                         product_url=product['product_url'],
                         product_image_url=product['product_image_src'])
 
-                    product_collection.update_one(
-                        {"product_url": product["product_url"]},
-                        {"$set": {"current_price": new_price, "last_checked": datetime.now()}}
-                    )
-                else:
-                    product_collection.update_one(
-                        {"product_url": product["product_url"]},
-                        {"$set": {"last_checked": datetime.now()}}
-                    )
-            # time.sleep(4 * 60 * 60)
-            time.sleep(10)
+                    # Update the product with the new price
+                    product["current_price"] = new_price
+
+                # Update last_checked regardless of price change
+                product["last_checked"] = datetime.now().isoformat()
+
+                user_collection.update_one(
+                    {"email": existing_user["email"]},
+                    {"$set": {"products": products}}
+                )
+
+            # Sleep for 4 hours before checking prices again
+            time.sleep(4 * 60 * 60)
 
     # def place_order_and_checkout(self):
     #     def human_like_delay(min_delay=1, max_delay=3):

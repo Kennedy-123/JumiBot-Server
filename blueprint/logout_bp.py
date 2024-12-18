@@ -9,7 +9,6 @@ def logout_user():
         # Clear the session data
         session.clear()
 
-        # Optionally, you can return a success response
         return jsonify({'success': True, 'message': 'Logged out successfully'}), 200
     except Exception as e:
         # Handle any errors during logout

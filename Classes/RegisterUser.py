@@ -2,6 +2,7 @@ from schema.user_schema import user_schema
 from database.db import user_collection
 from marshmallow import ValidationError
 from werkzeug.security import generate_password_hash
+from Classes.Email import SendEmail
 
 
 class UserRegistration:
@@ -22,7 +23,8 @@ class UserRegistration:
             new_user = {
                 'username': username,
                 'email': email,
-                'password': hashed_password
+                'password': hashed_password,
+                "products": []
             }
 
             # Validate the user data using the schema
@@ -35,6 +37,11 @@ class UserRegistration:
 
             # Insert the user into the database
             user_collection.insert_one(new_user)
+
+            # send welcome email
+            email_sender = SendEmail()
+            email_sender.send_welcome_email(email, username)
+
             return {"success": True, "message": "User registered successfully."}
 
         except Exception as e:

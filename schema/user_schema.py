@@ -1,4 +1,5 @@
 from marshmallow import Schema, fields, validate
+from schema.product_schema import ProductSchema
 
 # Define the schema using Schema.from_dict
 user_schema = Schema.from_dict({
@@ -19,5 +20,6 @@ user_schema = Schema.from_dict({
     'password': fields.String(
         required=True,
         validate=validate.Length(min=6, error="Password must be at least 6 characters long.")
-    )
+    ),
+    "products": fields.List(fields.Nested(ProductSchema), required=False, description="List of products being tracked")
 })

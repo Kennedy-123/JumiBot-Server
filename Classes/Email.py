@@ -3,6 +3,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from dotenv import load_dotenv
 import os
+from flask import render_template
 
 # Load the .env file
 load_dotenv()
@@ -81,3 +82,31 @@ class SendEmail:
         except Exception as e:
             # return False, f"Error sending email: {str(e)}"
             print(f'error: {e}')
+
+    def send_welcome_email(self, user_email, user_name):
+        html_content = render_template(
+            'welcome_email_template.html',
+            user_name=user_name,
+        )
+        # Create the email message
+        msg = MIMEMultipart("alternative")
+        msg['From'] = self.email_address
+        msg['To'] = user_email
+        msg['Subject'] = "Welcome to Autobot!"
+
+        # Attach the HTML content
+        msg.attach(MIMEText(html_content, "html"))
+
+        # Send the email via the SMTP server
+        try:
+            with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:
+                server.starttls()  # Secure the connection
+                server.login(self.email_address, self.email_password)
+                server.sendmail(
+                    self.email_address,
+                    user_email,
+                    msg.as_string()
+                )
+                print(f"Welcome email successfully sent to {user_email}")
+        except Exception as e:
+            print(f"Failed to send email to {user_email}. Error: {e}")
