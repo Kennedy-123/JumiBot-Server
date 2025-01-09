@@ -33,7 +33,7 @@ class UserRegistration:
                 user_schema_instance.load(new_user)  # Validate the new user
             except ValidationError as e:
                 # Return the custom validation error messages
-                return {"success": False, "errors": e.messages}
+                return {"success": False, "errors": "An unexpected error occurred. Please try again later."}, 500
 
             # Insert the user into the database
             user_collection.insert_one(new_user)

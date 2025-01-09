@@ -10,10 +10,10 @@ from decorators.auth_decorators import login_required
 track_bp = Blueprint('track', __name__, url_prefix='/track')
 
 
-@track_bp.route('/', methods=['POST'])
+@track_bp.route('', methods=['POST'])
 @login_required
 def track_product():
-    url = request.json.get('url')
+    url = request.json.get('productUrl')
     if not url:
         return jsonify({"error": "URL is required"}), 400
 
@@ -76,8 +76,8 @@ def track_product():
         tracking_thread = threading.Thread(target=tracker.start_tracking, daemon=True, args=(user_email,))
         tracking_thread.start()
 
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    except:
+        return jsonify({"error": "An unexpected error occurred. Please try again later."}), 500
 
     # Respond to the user immediately after starting tracking
     return jsonify({"message": "Tracking started successfully"}), 200

@@ -4,7 +4,7 @@ from Classes.LoginUser import Login
 login_bp = Blueprint('login', __name__, url_prefix='/login-user')
 
 
-@login_bp.route('/', methods=['POST'])
+@login_bp.route('', methods=['POST'])
 def login_user():
     try:
         # Extract the JSON data sent in the request body
@@ -19,7 +19,7 @@ def login_user():
 
         # Return the response returned by the login_user method
         return response
-    except Exception as e:
-        return jsonify({'msg': str(e)}), 500
+    except:
+        return jsonify({'msg': 'An unexpected error occurred. Please try again later.'}), 500
 
 

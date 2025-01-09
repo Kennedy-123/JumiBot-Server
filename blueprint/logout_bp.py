@@ -3,7 +3,7 @@ from flask import jsonify, Blueprint, session
 logout_bp = Blueprint('logout', __name__, url_prefix='/logout-user')
 
 
-@logout_bp.route('/', methods=['POST'])
+@logout_bp.route('', methods=['GET'])
 def logout_user():
     try:
         # Clear the session data

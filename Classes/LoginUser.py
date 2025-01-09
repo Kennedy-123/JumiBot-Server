@@ -27,19 +27,14 @@ class Login:
             if not check_password_hash(user_password, password):
                 return make_response({'success': False, 'error': 'Incorrect credentials'}, 401)
 
-            # Set session data to track the logged-in user
-            session['user_id'] = str(user['_id'])  # Store user ID in session
-            session['user_email'] = user['email']  # Store email in session
-
             session.permanent = True  # allows you to configure a specific expiration time for the session
+
+            # Set session data to track the logged-in user
+            session['user_email'] = user['email']  # Store email in session
 
             # Create a response object to set cookies
             response = make_response({'success': True, 'message': 'Login successfully'}, 200)
 
-            # Set cookies for session ID and user email
-            response.set_cookie('username', user['username'], max_age=3600)  # 1-hour expiry
-
             return response
-        except Exception as e:
-            return make_response({"success": False, "message": str(e)}, 500)
-
+        except:
+            return make_response({"success": False, "message": 'An unexpected error occurred. Please try again later.'}, 500)

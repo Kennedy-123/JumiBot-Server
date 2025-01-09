@@ -90,9 +90,9 @@ class SendEmail:
         )
         # Create the email message
         msg = MIMEMultipart("alternative")
-        msg['From'] = self.email_address
+        msg['From'] = f"AutoBot <{self.email_address}>"
         msg['To'] = user_email
-        msg['Subject'] = "Welcome to Autobot!"
+        msg['Subject'] = "Autobot"
 
         # Attach the HTML content
         msg.attach(MIMEText(html_content, "html"))
@@ -107,6 +107,5 @@ class SendEmail:
                     user_email,
                     msg.as_string()
                 )
-                print(f"Welcome email successfully sent to {user_email}")
         except Exception as e:
             print(f"Failed to send email to {user_email}. Error: {e}")

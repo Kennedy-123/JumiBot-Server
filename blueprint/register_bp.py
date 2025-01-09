@@ -4,14 +4,14 @@ from Classes.RegisterUser import UserRegistration
 register_bp = Blueprint('register', __name__, url_prefix='/register-user')
 
 
-@register_bp.route('/', methods=['POST'])
+@register_bp.route('', methods=['POST'])
 def register_user():
     try:
         data = request.json
         username = data.get('username')
         email = data.get('email')
         password = data.get('password')
-        repeat_password = data.get('repeat_password')
+        repeat_password = data.get('confirmPassword')
 
         # Check if repeat_password is provided
         if not repeat_password:
