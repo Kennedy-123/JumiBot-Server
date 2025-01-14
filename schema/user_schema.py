@@ -18,8 +18,10 @@ user_schema = Schema.from_dict({
         ]
     ),
     'password': fields.String(
-        required=True,
-        validate=validate.Length(min=6, error="Password must be at least 6 characters long.")
+        required=False,
+        validate=validate.Length(min=6, error="Password must be at least 6 characters long."),
+        allow_none=True
     ),
+    "isGoogleAuth": fields.Boolean(required=False),
     "products": fields.List(fields.Nested(ProductSchema), required=False, description="List of products being tracked")
 })

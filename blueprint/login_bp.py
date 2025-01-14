@@ -20,6 +20,6 @@ def login_user():
         # Return the response returned by the login_user method
         return response
     except:
-        return jsonify({'msg': 'An unexpected error occurred. Please try again later.'}), 500
+        return jsonify({'message': 'An unexpected error occurred. Please try again later.'}), 500
 
 

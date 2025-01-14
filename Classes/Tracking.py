@@ -24,7 +24,6 @@ class Tracking:
 
         service = Service(self.driver_path)
         self.driver = webdriver.Chrome(service=service, options=chrome_options)
-        # self.driver.maximize_window()
 
     def __enter__(self):
         return self
@@ -62,10 +61,14 @@ class Tracking:
         # check the price every 4 hours
         while True:
             existing_user = user_collection.find_one({"email": user_email})
+
             if not existing_user:
-                return
+                break
 
             products = existing_user.get('products', [])
+
+            if not products:
+                break
 
             for product in products:
                 self.driver.get(product["product_url"])

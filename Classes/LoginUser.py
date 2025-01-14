@@ -9,23 +9,23 @@ class Login:
         try:
             # Check if email is provided
             if not email:
-                return make_response({"success": False, "error": 'Enter email'}, 400)
+                return make_response({"success": False, "message": 'Enter email'}, 400)
 
             # Check if password is provided
             elif not password:
-                return make_response({"success": False, "error": "Enter password"}, 400)
+                return make_response({"success": False, "message": "Enter password"}, 400)
 
             # Query the database for a user with the provided email
             user = user_collection.find_one({"email": email})
             if not user:  # If no user is found, return an error message
-                return make_response({'success': False, 'error': "You don't have an account"}, 404)
+                return make_response({'success': False, 'message': "You don't have an account"}, 404)
 
             # Extract the stored hashed password
             user_password = user['password']
 
             # Verify the provided password against the stored hashed password
             if not check_password_hash(user_password, password):
-                return make_response({'success': False, 'error': 'Incorrect credentials'}, 401)
+                return make_response({'success': False, 'message': 'Incorrect credentials'}, 401)
 
             session.permanent = True  # allows you to configure a specific expiration time for the session
 

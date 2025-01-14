@@ -71,17 +71,11 @@ class SendEmail:
         # Attach the HTML content
         msg.attach(MIMEText(html_content, "html"))
 
-        try:
-            # Send the email using SMTP
-            with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:
-                server.starttls()
-                server.login(self.email_address, self.email_password)
-                server.send_message(msg)
-                # return True, "email sent"
-                print('email sent')
-        except Exception as e:
-            # return False, f"Error sending email: {str(e)}"
-            print(f'error: {e}')
+        # Send the email using SMTP
+        with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:
+            server.starttls()
+            server.login(self.email_address, self.email_password)
+            server.send_message(msg)
 
     def send_welcome_email(self, user_email, user_name):
         html_content = render_template(

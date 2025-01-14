@@ -22,4 +22,4 @@ def get_tracked_products():
         return jsonify({"products": existing_user["products"]}), 200
 
     except:
-        return jsonify({'error': 'An unexpected error occurred. Please try again later.'}), 500
+        return jsonify({'error': 'Please try again later.'}), 500
