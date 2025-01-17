@@ -7,10 +7,10 @@ from Classes.Payment import Payment
 # Load the .env file
 load_dotenv()
 
-subscriptions_bp = Blueprint('subscriptions', __name__, url_prefix='/subscription')
+subscriptions_bp = Blueprint('subscriptions', __name__)
 
 
-@subscriptions_bp.route('/', methods=['POST'])
+@subscriptions_bp.route('/subscription', methods=['POST'])
 @login_required
 def initialize_payment():
     """

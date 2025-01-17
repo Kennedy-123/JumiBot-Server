@@ -25,6 +25,8 @@ class UserRegistration:
                     'email': email,
                     'password': hashed_password,
                     "isGoogleAuth": is_google_auth,
+                    "email_token": None,
+                    "subscription_code": None,
                     "products": []
                 }
             else:
@@ -33,6 +35,8 @@ class UserRegistration:
                     'username': username,
                     'email': email,
                     "isGoogleAuth": is_google_auth,
+                    "email_token": None,
+                    "subscription_code": None,
                     "products": []
                 }
 

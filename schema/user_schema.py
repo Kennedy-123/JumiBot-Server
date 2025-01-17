@@ -23,5 +23,13 @@ user_schema = Schema.from_dict({
         allow_none=True
     ),
     "isGoogleAuth": fields.Boolean(required=False),
+    "email_token": fields.String(
+        required=False,
+        allow_none=True
+    ),
+    "subscription_code": fields.String(
+        required=False,
+        allow_none=True
+    ),
     "products": fields.List(fields.Nested(ProductSchema), required=False, description="List of products being tracked")
 })

@@ -9,6 +9,9 @@ from blueprint.callback_bp import callback_bp
 from blueprint.check_login_bp import check_login_bp
 from blueprint.tracked_product_bp import tracked_product_bp
 from blueprint.remove_tracked_product_bp import remove_product_bp
+from blueprint.webhook_bp import webhook_bp
+from blueprint.cancel_subscription_bp import cancel_subscription_bp
+from blueprint.check_subscription_status import check_subscription_status_bp
 import os
 from dotenv import load_dotenv
 from datetime import timedelta
@@ -37,6 +40,9 @@ app.register_blueprint(callback_bp)
 app.register_blueprint(check_login_bp)
 app.register_blueprint(tracked_product_bp)
 app.register_blueprint(remove_product_bp)
+app.register_blueprint(webhook_bp)
+app.register_blueprint(cancel_subscription_bp)
+app.register_blueprint(check_subscription_status_bp)
 
 
 if __name__ == '__main__':
