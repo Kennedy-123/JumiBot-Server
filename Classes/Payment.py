@@ -23,7 +23,7 @@ class Payment:
             "email": email,
             "amount": amount,  # Amount in kobo
             "currency": "NGN",  # Change this to USD if you're using USD
-            "callback_url": "https://jumibot-client.onrender.com//payment-success",  # Your callback URL
+            "callback_url": "https://jumibot-client.onrender.com/payment-success",  # Your callback URL
             "channels": ["card"],
             "metadata": {"plan_code": plan_code}  # Store the plan code for later reference
         }
