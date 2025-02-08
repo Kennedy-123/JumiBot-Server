@@ -1,6 +1,13 @@
 import pymongo
 from dotenv import load_dotenv
 import os
+import logging
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 # Load the .env file
 load_dotenv()
@@ -14,6 +21,6 @@ try:
     product_collection = db['product']
     user_collection = db['users']
 
-    print("Connected")
+    logging.info("Connected to MongoDB successfully.")
 except:
-    print('connection failed')
+    logging.error("Connection to MongoDB failed.", exc_info=True)

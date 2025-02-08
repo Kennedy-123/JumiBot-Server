@@ -24,6 +24,7 @@ class Payment:
             "amount": amount,  # Amount in kobo
             "currency": "NGN",  # Change this to USD if you're using USD
             "callback_url": "http://localhost:3000/payment-success",  # Your callback URL
+            "channels": ["card"],
             "metadata": {"plan_code": plan_code}  # Store the plan code for later reference
         }
 

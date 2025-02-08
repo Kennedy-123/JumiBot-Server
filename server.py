@@ -15,6 +15,8 @@ from blueprint.check_subscription_status import check_subscription_status_bp
 import os
 from dotenv import load_dotenv
 from datetime import timedelta
+from utils.start_tracking import schedule_tracking
+from threading import Thread
 
 # Load the .env file
 load_dotenv()
@@ -26,9 +28,9 @@ app.secret_key = os.getenv('SECRET_KEY')
 # Set the session expiration time globally
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=5)  # 5 days
 
-app.config['SESSION_COOKIE_SECURE'] = False  # Use True if using HTTPS
-# app.config['SESSION_COOKIE_SAMESITE'] = 'None'  # Allow cross-origin cookies
-app.config['SESSION_COOKIE_HTTPONLY'] = True   # Protect cookies from being accessed via JavaScript
+app.config['SESSION_COOKIE_SECURE'] = True  # Use True if using HTTPS
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'  # Allow cross-origin cookies
+app.config['SESSION_COOKIE_HTTPONLY'] = True  # Protect cookies from being accessed via JavaScript
 
 # Register blueprint
 app.register_blueprint(track_bp)
@@ -44,6 +46,8 @@ app.register_blueprint(webhook_bp)
 app.register_blueprint(cancel_subscription_bp)
 app.register_blueprint(check_subscription_status_bp)
 
-
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    if os.getenv('FLASK_ENV') == 'production' and os.getenv('RUN_MAIN') == 'true':
+        schedule_thread = Thread(target=schedule_tracking, daemon=True)
+        schedule_thread.start()
+    app.run()

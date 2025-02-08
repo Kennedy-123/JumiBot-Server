@@ -4,16 +4,23 @@ from email.mime.text import MIMEText
 from dotenv import load_dotenv
 import os
 from flask import render_template
+import logging
 
 # Load the .env file
 load_dotenv()
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 
 class SendEmail:
     def __init__(self):
         self.smtp_server = 'smtp.gmail.com'
         self.smtp_port = 587
-        self.email_address = 'kennedyokolo222@gmail.com'
+        self.email_address = os.getenv('EMAIL_ADDRESS')
         self.email_password = os.getenv('EMAIL_PASSWORD')
 
     def send_price_drop_email(self, recipient_email, product_name, new_price, product_url, product_image_url):
@@ -64,7 +71,7 @@ class SendEmail:
 
         # Create the email message
         msg = MIMEMultipart("alternative")
-        msg['From'] = self.email_address
+        msg['From'] = f"AutoBot <{self.email_address}>"
         msg['To'] = recipient_email
         msg['Subject'] = f"Price Drop Alert: {product_name}"
 
@@ -102,4 +109,4 @@ class SendEmail:
                     msg.as_string()
                 )
         except Exception as e:
-            print(f"Failed to send email to {user_email}. Error: {e}")
+            logging.error(f"Failed to send email to {user_email}. Error: {e}")

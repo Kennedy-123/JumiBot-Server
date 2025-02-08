@@ -1,8 +1,12 @@
 from flask import Blueprint
 from flask import request, jsonify, make_response
 from database.db import user_collection
+import logging
 
 webhook_bp = Blueprint('webhook', __name__)
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
 
 
 @webhook_bp.post('/webhook')
@@ -40,6 +44,6 @@ def webhook():
             }}
         )
     else:
-        print("Unhandled event:", event)
+        logging.warning("Unhandled event:", event)
 
     return jsonify({"status": "success"}), 200

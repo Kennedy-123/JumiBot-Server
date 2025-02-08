@@ -4,7 +4,6 @@ from datetime import datetime
 from schema.product_schema import ProductSchema
 from marshmallow import ValidationError
 from database.db import user_collection
-import threading
 from decorators.auth_decorators import login_required
 
 track_bp = Blueprint('track', __name__, url_prefix='/track')
@@ -45,18 +44,34 @@ def track_product():
 
         if existing_user:
             products = existing_user.get('products', [])
-            product_found = False
 
             for product in products:
                 if product["product_url"] == url:
-                    # Update if the price has changed
+                    # Update price only if it's lower
                     if product["current_price"] > product_details["current_price"]:
                         product["current_price"] = product_data["current_price"]
-                    product_found = True
+                        # Update the database
+                        user_collection.update_one(
+                            {"email": session['user_email']},
+                            {"$set": {"products": products}}
+                        )
+                    return jsonify({"error": "This product is already being tracked."}), 400
 
-            if not product_found:
+            basic_subscription_token = request.cookies.get('basic_subscription_token')
+
+            if len(products) < 2:
                 # Add the new product if not found
                 products.append(product_data)
+            elif len(products) == 2 and basic_subscription_token:
+                # Add the new product if not found
+                products.append(product_data)
+            elif len(products) == 2 and not basic_subscription_token:
+                return jsonify({'redirect': "/pricing"}), 200
+            elif len(products) < 5 and basic_subscription_token:
+                # Add the new product if not found
+                products.append(product_data)
+            elif len(products) == 5 and basic_subscription_token:
+                return jsonify({'redirect': "/pricing"}), 200
 
             # Update the user document in the database
             user_collection.update_one(
@@ -70,11 +85,6 @@ def track_product():
                 "products": [product_data]
             }
             user_collection.insert_one(new_user)
-
-        # Start the tracking process in a new thread
-        user_email = session['user_email']
-        tracking_thread = threading.Thread(target=tracker.start_tracking, daemon=True, args=(user_email,))
-        tracking_thread.start()
 
     except:
         return jsonify({"error": "An unexpected error occurred. Please try again later."}), 500
