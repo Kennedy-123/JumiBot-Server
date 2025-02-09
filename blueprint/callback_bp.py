@@ -64,7 +64,7 @@ def handle_callback():
                     httponly=True,
                     secure=True,  # Use True in production with HTTPS
                     samesite="None",
-                    domain='https://jumibot-client.onrender.com',
+                    domain='jumibot-client.onrender.com',
                     max_age=30 * 24 * 60 * 60  # Cookie valid for 30 days
                 )
 
