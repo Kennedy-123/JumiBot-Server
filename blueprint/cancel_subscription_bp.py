@@ -41,7 +41,7 @@ def cancel_subscription():
 
         if response.status_code == 200:
             res = make_response(jsonify({"status": "success", "message": "Subscription canceled successfully"}), 200)
-            res.delete_cookie("basic_subscription_token", domain='jumibot-client.onrender.com', secure=True, samesite="None")
+            res.delete_cookie("basic_subscription_token", domain='jumibot-client.onrender.com', secure=True, samesite="None", path='/')
             return res
         else:
             return jsonify({
