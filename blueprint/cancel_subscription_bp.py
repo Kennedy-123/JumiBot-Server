@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, session, make_response
+from flask import Blueprint, jsonify, session, make_response
 from decorators.auth_decorators import login_required
 from database.db import user_collection
 import requests
@@ -41,7 +41,7 @@ def cancel_subscription():
 
         if response.status_code == 200:
             res = make_response(jsonify({"status": "success", "message": "Subscription canceled successfully"}), 200)
-            res.delete_cookie("basic_subscription_token")
+            res.delete_cookie("basic_subscription_token", domain='https://jumibot-client.onrender.com', secure=True, samesite="None")
             return res
         else:
             return jsonify({
@@ -52,5 +52,3 @@ def cancel_subscription():
 
     except Exception as e:
         return jsonify({"status": "error", "message": "An error occurred", "details": str(e)}), 500
-
-
