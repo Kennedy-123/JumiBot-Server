@@ -62,7 +62,7 @@ def handle_callback():
                     "basic_subscription_token",
                     subscription_token,
                     httponly=True,
-                    secure=False,  # Use True in production with HTTPS
+                    secure=True,  # Use True in production with HTTPS
                     samesite="Lax",
                     max_age=30 * 24 * 60 * 60  # Cookie valid for 30 days
                 )
