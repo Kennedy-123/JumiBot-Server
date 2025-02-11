@@ -4,7 +4,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
-import tempfile
 
 
 class Tracking:
@@ -17,10 +16,6 @@ class Tracking:
         chrome_options.add_argument("--window-size=1920,1080")  # Set window size for better compatibility
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
-
-        # Use a unique temporary directory for user data (to avoid conflicts)
-        user_data_dir = tempfile.TemporaryDirectory()  # Automatically cleaned up
-        chrome_options.add_argument(f"--user-data-dir={user_data_dir.name}")
 
         service = Service(ChromeDriverManager().install())
         self.driver = webdriver.Chrome(service=service, options=chrome_options)
