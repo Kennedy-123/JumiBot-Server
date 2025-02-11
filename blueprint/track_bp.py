@@ -86,8 +86,7 @@ def track_product():
             }
             user_collection.insert_one(new_user)
 
-    except Exception as e:
-        print(e)
+    except:
         return jsonify({"error": "An unexpected error occurred. Please try again later."}), 500
 
     # Respond to the user immediately after starting tracking
