@@ -12,6 +12,7 @@ from blueprint.remove_tracked_product_bp import remove_product_bp
 from blueprint.webhook_bp import webhook_bp
 from blueprint.cancel_subscription_bp import cancel_subscription_bp
 from blueprint.check_subscription_status import check_subscription_status_bp
+from blueprint.monitor_bp import monitor
 import os
 from dotenv import load_dotenv
 from datetime import timedelta
@@ -45,6 +46,7 @@ app.register_blueprint(remove_product_bp)
 app.register_blueprint(webhook_bp)
 app.register_blueprint(cancel_subscription_bp)
 app.register_blueprint(check_subscription_status_bp)
+app.register_blueprint(monitor)
 
 if __name__ == '__main__':
     if os.getenv('FLASK_ENV') == 'production' and os.getenv('RUN_MAIN') == 'true':
